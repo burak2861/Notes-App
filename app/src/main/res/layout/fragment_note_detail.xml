@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".detail.NoteDetailFragment">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/titleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:autofillHints=""
+        android:imeOptions="actionDone"
+        android:hint="@string/title"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/black" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/contentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/black"
+        android:hint="@string/content"
+        android:inputType="textMultiLine"
+        android:textColor="@color/white"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
+</LinearLayout>
