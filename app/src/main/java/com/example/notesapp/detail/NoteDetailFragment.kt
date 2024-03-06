@@ -1,31 +1,23 @@
 package com.example.notesapp.detail
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.TextView.OnEditorActionListener
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.notesapp.database.NoteDetailListener
 import com.example.notesapp.databinding.FragmentNoteDetailBinding
 import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Date
-
 
 @AndroidEntryPoint
 class NoteDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteDetailBinding
     private val viewModel: NoteDetailViewModel by viewModels()
-    private var noteDetailListener: NoteDetailListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,12 +33,6 @@ class NoteDetailFragment : Fragment() {
         setupViews()
         observe()
 
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                //saveNote()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun observe() {
@@ -66,12 +52,6 @@ class NoteDetailFragment : Fragment() {
 
     private fun setupViews() {
 
-        binding.btnShow.setOnClickListener {
-            seeNotes()
-        }
-        binding.btnSave.setOnClickListener {
-          saveNote()
-        }
         val noteId = arguments?.getLong("noteId") ?: -1
         if (noteId != -1L) {
             viewModel.loadNoteById(noteId)
@@ -80,10 +60,9 @@ class NoteDetailFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        saveNote()
     }
-private fun seeNotes(){
-    viewModel.getNotes()
-}
+
     private fun saveNote() {
         val title = binding.titleEditText.text.toString()
         val content = binding.contentEditText.text.toString()
@@ -99,10 +78,6 @@ private fun seeNotes(){
                 }
             }
         }
-    }
-
-    fun setNoteDetailListener(listener: NoteDetailListener) {
-        this.noteDetailListener = listener
     }
 }
 

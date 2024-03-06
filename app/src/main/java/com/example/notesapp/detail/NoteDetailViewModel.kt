@@ -37,13 +37,6 @@ class NoteDetailViewModel @Inject constructor(private val repository: NoteReposi
             }
         }
     }
-fun getNotes(){
-    viewModelScope.launch {
-        repository.getAllNotes.collect { notes ->
-           val a = notes
-        }
-    }
-}
     fun saveOrUpdateNote(note: Note) {
         viewModelScope.launch {
             if (note.id != -1L) {

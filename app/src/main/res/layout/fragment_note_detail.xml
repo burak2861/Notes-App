@@ -27,16 +27,6 @@
         android:hint="@string/content"
         android:inputType="textMultiLine"
         android:textColor="@color/white"/>
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAVE"/>
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnShow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show"/>
 
     <View
         android:id="@+id/view"
