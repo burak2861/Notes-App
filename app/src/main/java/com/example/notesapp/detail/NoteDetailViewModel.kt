@@ -14,7 +14,10 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class NoteDetailViewModel @Inject constructor(private val repository: NoteRepository, savedStateHandle: SavedStateHandle) : ViewModel() {
+class NoteDetailViewModel @Inject constructor(
+    private val repository: NoteRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private val _args = NoteDetailFragmentArgs.fromSavedStateHandle(savedStateHandle)
 
@@ -27,23 +30,15 @@ class NoteDetailViewModel @Inject constructor(private val repository: NoteReposi
         }
     }
 
-    fun loadNoteById(noteId: Long) {
+    fun updateData(note: Note) {
         viewModelScope.launch {
-            if (noteId != -1L) {
-                val note = repository.getNoteById(noteId)
-                _selectedNote.value = note
-            } else {
-                _selectedNote.value = Note(id = 1, title = "", content = "", date = Date())
-            }
+            repository.update(note)
         }
     }
-    fun saveOrUpdateNote(note: Note) {
+
+    fun insertData(note: Note) {
         viewModelScope.launch {
-            if (note.id != -1L) {
-                repository.update(note)
-            } else {
-                repository.insert(note)
-            }
+            repository.insert(note)
         }
     }
 }

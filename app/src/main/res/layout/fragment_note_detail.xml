@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/black"
     android:orientation="vertical"
     tools:context=".detail.NoteDetailFragment">
 
@@ -12,11 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:autofillHints=""
-        android:imeOptions="actionDone"
+        android:background="@color/darkgrey"
         android:hint="@string/title"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
-        android:textColor="@color/black" />
+        android:textColor="@color/white"
+        android:textColorHint="#BDBDBD"
+        android:paddingStart="8dp"/>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/contentEditText"
@@ -24,12 +27,17 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@android:color/black"
+        android:gravity="top"
         android:hint="@string/content"
         android:inputType="textMultiLine"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:textColorHint="#BDBDBD"
+        android:paddingStart="8dp"
+        android:paddingTop="20dp"/>
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:layout_height="56dp"
+        android:background="@color/darkgrey"/>
 </LinearLayout>

@@ -12,14 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.notesapp.R
-import com.example.notesapp.database.NoteDetailListener
 import com.example.notesapp.databinding.FragmentNoteListBinding
 import com.example.notesapp.list.adapter.NoteAdapter
-import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.Date
 
 
 @AndroidEntryPoint
@@ -58,7 +54,7 @@ class NoteListFragment : Fragment() {
         viewModel.getAllNotes()
 
         binding.searchView.setOnQueryTextListener(object :
-            android.widget.SearchView.OnQueryTextListener {
+            SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
