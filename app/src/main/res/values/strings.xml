@@ -10,4 +10,5 @@
     <string name="content">Content</string>
     <string name="title">Title</string>
     <string name="welcome_to_notes_app">Welcome to Notes App</string>
+    <string name="notes_app">Notes App</string>
 </resources>
