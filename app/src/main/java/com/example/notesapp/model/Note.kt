@@ -18,5 +18,7 @@ data class Note(
     @ColumnInfo(name = "content")
     val content: String,
     @ColumnInfo(name = "date")
-    val date: String = getCurrentTime()
+    val date: String = getCurrentTime(),
+    @ColumnInfo(name = "myHashcode")
+    val myHashCode: Int
 ) : Parcelable

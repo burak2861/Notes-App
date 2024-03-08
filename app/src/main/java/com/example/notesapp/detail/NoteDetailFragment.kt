@@ -5,16 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.notesapp.databinding.FragmentNoteDetailBinding
 import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Date
 
 @AndroidEntryPoint
 class NoteDetailFragment : Fragment() {
@@ -59,22 +55,39 @@ class NoteDetailFragment : Fragment() {
         val title = binding.titleEditText.text.toString()
         val content = binding.contentEditText.text.toString()
 
-        if (title.isNotBlank() || content.isNotBlank()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelable("note", Note::class.java)?.let {
-                    viewModel.updateData(Note(it.id, title, content))
-                } ?: run {
-                    viewModel.insertData(Note(title = title, content = content))
-                }
-            } else {
-                arguments?.getParcelable<Note>("note")?.let {
-                    viewModel.updateData(Note(it.id, title, content))
-                } ?: run {
-                    viewModel.insertData(Note(title = title, content = content))
-                }
+        val newHashCode = (title + content).hashCode()
+
+        if (title.isBlank() && content.isBlank()) {
+            return
+        }
+
+        val parcelable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            arguments?.getParcelable("note", Note::class.java)
+        else arguments?.getParcelable<Note>("note");
+
+        parcelable?.let {
+            if (it.myHashCode != newHashCode) {
+                viewModel.updateData(
+                    Note(
+                        it.id,
+                        title,
+                        content,
+                        myHashCode = (title + content).hashCode()
+                    )
+                )
             }
+        } ?: run {
+            viewModel.insertData(
+                Note(
+                    title = title,
+                    content = content,
+                    myHashCode = (title + content).hashCode()
+                )
+            )
         }
     }
+
+
 }
 
 
