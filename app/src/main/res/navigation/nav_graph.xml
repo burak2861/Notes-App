@@ -8,21 +8,25 @@
     <fragment
         android:id="@+id/noteListFragment"
         android:name="com.example.notesapp.list.NoteListFragment"
-        android:label="Note List"
-        tools:layout="@layout/fragment_note_list" >
+        android:label="List"
+        tools:layout="@layout/fragment_note_list">
         <action
             android:id="@+id/action_noteListFragment_to_noteDetailFragment"
-            app:destination="@id/noteDetailFragment" />
+            app:destination="@id/noteDetailFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"
         android:name="com.example.notesapp.detail.NoteDetailFragment"
-        android:label="Note Detail"
-        tools:layout="@layout/fragment_note_detail" >
+        android:label="Detail"
+        tools:layout="@layout/fragment_note_detail">
         <argument
             android:name="note"
+            android:defaultValue="@null"
             app:argType="com.example.notesapp.model.Note"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </fragment>
 </navigation>

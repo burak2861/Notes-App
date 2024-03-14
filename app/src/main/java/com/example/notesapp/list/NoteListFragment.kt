@@ -1,7 +1,13 @@
 package com.example.notesapp.list
 
+import android.app.SearchManager
+import android.content.ComponentName
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +19,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.notesapp.R
 import com.example.notesapp.databinding.FragmentNoteListBinding
 import com.example.notesapp.list.adapter.NoteAdapter
+import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,23 +56,13 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         listeners()
         setupRecyclerView()
         observeNotes()
         viewModel.getAllNotes()
 
-        binding.searchView.setOnQueryTextListener(object :
-            SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchNotes(newText.orEmpty())
-                return true
-            }
-        })
     }
 
     private fun listeners() {
@@ -84,11 +82,45 @@ class NoteListFragment : Fragment() {
 
     private fun observeNotes() {
         viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.allNotes.collect { notes ->
                     noteAdapter.submitList(notes)
                 }
             }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        inflater.inflate(R.menu.menu, menu)
+        val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager?
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setSearchableInfo(manager?.getSearchableInfo(requireActivity().componentName))
+
+
+        searchView.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.searchNotes(newText.orEmpty())
+                return true
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_search -> {
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
