@@ -1,4 +1,4 @@
-package com.example.notesapp.list.adapter
+package com.example.notesapp.ui.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.model.Note
 import com.example.notesapp.databinding.NoteRecyclerviewBinding
 
-class NoteAdapter(private val onDeleteClickListener: (Note) -> Unit,
-                  private val onItemClickListener: (Note) -> Unit) :
-    ListAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
+class NoteAdapter(
+    private val onDeleteClickListener: (Note) -> Unit,
+    private val onItemClickListener: (Note) -> Unit
+) : ListAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding =
@@ -25,23 +26,16 @@ class NoteAdapter(private val onDeleteClickListener: (Note) -> Unit,
     inner class NoteViewHolder(private val binding: NoteRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var currentNote: Note
-
         init {
             binding.deleteNoteButton.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    val note = getItem(position)
-                    onDeleteClickListener(note)
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    onDeleteClickListener.invoke(getItem(bindingAdapterPosition))
                 }
             }
 
             binding.root.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    val note = getItem(position)
-                    onItemClickListener(note)
-
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClickListener.invoke(getItem(bindingAdapterPosition))
                 }
             }
         }
@@ -50,7 +44,7 @@ class NoteAdapter(private val onDeleteClickListener: (Note) -> Unit,
             binding.apply {
                 noteTitleList.text = note.title
                 noteContentList.text = note.content
-                dateTextView.text = note.date.toString()
+                dateTextView.text = note.date
             }
         }
     }

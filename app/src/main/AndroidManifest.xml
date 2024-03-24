@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".MyApp"
+        android:name=".application.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,19 +14,17 @@
         android:theme="@style/Theme.NotesApp"
         tools:targetApi="31">
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".NoteActivity"
+            android:name=".ui.NoteActivity"
             android:exported="true"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

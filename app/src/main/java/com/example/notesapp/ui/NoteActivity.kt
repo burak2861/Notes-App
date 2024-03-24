@@ -1,4 +1,4 @@
-package com.example.notesapp
+package com.example.notesapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.notesapp.R
 import com.example.notesapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

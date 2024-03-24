@@ -1,4 +1,4 @@
-package com.example.notesapp.list
+package com.example.notesapp.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NoteListViewModel @Inject constructor(private val repository: NoteRepository) : ViewModel() {
+class NoteListViewModel @Inject constructor(
+    private val repository: NoteRepository
+) : ViewModel() {
 
     private val _allNotes = MutableStateFlow<List<Note>>(emptyList())
     val allNotes: StateFlow<List<Note>> = _allNotes
@@ -22,7 +24,7 @@ class NoteListViewModel @Inject constructor(private val repository: NoteReposito
 
     fun getAllNotes() {
         viewModelScope.launch {
-            repository.getAllNotes.collect { notes ->
+            repository.getAll().collect { notes ->
                 _allNotes.value = notes
             }
         }

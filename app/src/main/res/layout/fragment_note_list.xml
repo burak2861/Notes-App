@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    tools:context=".list.NoteListFragment">
+    tools:context=".ui.list.NoteListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/noteRecyclerView"
@@ -29,6 +29,5 @@
         android:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

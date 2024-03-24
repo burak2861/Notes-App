@@ -1,4 +1,4 @@
-package com.example.notesapp.detail
+package com.example.notesapp.ui.detail
 
 import android.os.Build
 import android.os.Bundle
@@ -55,23 +55,24 @@ class NoteDetailFragment : Fragment() {
         val title = binding.titleEditText.text.toString()
         val content = binding.contentEditText.text.toString()
 
-        val newHashCode = (title + content).hashCode()
-
         if (title.isBlank() && content.isBlank()) {
             return
         }
+        val newHashCode = (title + content).hashCode()
 
-        val parcelable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            arguments?.getParcelable("note", Note::class.java)
-        else arguments?.getParcelable<Note>("note");
+        val parcelable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(NOTE, Note::class.java)
+        } else {
+            arguments?.getParcelable(NOTE)
+        }
 
         parcelable?.let {
             if (it.myHashCode != newHashCode) {
                 viewModel.updateData(
                     Note(
-                        it.id,
-                        title,
-                        content,
+                        id = it.id,
+                        title = title,
+                        content = content,
                         myHashCode = (title + content).hashCode()
                     )
                 )
@@ -87,7 +88,9 @@ class NoteDetailFragment : Fragment() {
         }
     }
 
-
+    companion object {
+        private const val NOTE = "note"
+    }
 }
 
 

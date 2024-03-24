@@ -7,12 +7,8 @@ import kotlinx.coroutines.withContext
 
 class NoteRepository(private val noteDao: NoteDao) {
 
-    val getAllNotes: Flow<List<Note>> = noteDao.getAllNotes()
-
-    suspend fun getNoteById(noteId: Long): Note? {
-        return withContext(Dispatchers.IO) {
-            noteDao.getNoteById(noteId)
-        }
+    fun getAll(): Flow<List<Note>> {
+        return noteDao.getAllNotes()
     }
 
     fun searchNotes(query: String): Flow<List<Note>> {

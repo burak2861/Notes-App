@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    tools:context=".detail.NoteDetailFragment">
+    tools:context=".ui.detail.NoteDetailFragment">
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/titleEditText"
@@ -17,9 +17,9 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
+        android:paddingStart="12dp"
         android:textColor="@color/white"
-        android:textColorHint="#BDBDBD"
-        android:paddingStart="12dp"/>
+        android:textColorHint="#BDBDBD" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/contentEditText"
@@ -30,14 +30,15 @@
         android:gravity="top"
         android:hint="@string/content"
         android:inputType="textMultiLine"
-        android:textColor="@color/white"
-        android:textColorHint="#BDBDBD"
         android:paddingStart="12dp"
-        android:paddingTop="20dp"/>
+        android:paddingTop="20dp"
+        android:textColor="@color/white"
+        android:textColorHint="#BDBDBD" />
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/darkgrey"/>
+        android:background="@color/darkgrey" />
+
 </LinearLayout>

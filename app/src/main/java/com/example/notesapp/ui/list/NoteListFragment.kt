@@ -1,4 +1,4 @@
-package com.example.notesapp.list
+package com.example.notesapp.ui.list
 
 import android.app.SearchManager
 import android.content.ComponentName
@@ -21,11 +21,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesapp.R
 import com.example.notesapp.databinding.FragmentNoteListBinding
-import com.example.notesapp.list.adapter.NoteAdapter
+import com.example.notesapp.ui.list.adapter.NoteAdapter
 import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class NoteListFragment : Fragment() {
@@ -38,9 +37,9 @@ class NoteListFragment : Fragment() {
                 viewModel.deleteNote(note)
             },
             onItemClickListener = { note ->
-                val action =
+                findNavController().navigate(
                     NoteListFragmentDirections.actionNoteListFragmentToNoteDetailFragment(note)
-                findNavController().navigate(action)
+                )
             }
         )
     }
@@ -62,14 +61,13 @@ class NoteListFragment : Fragment() {
         setupRecyclerView()
         observeNotes()
         viewModel.getAllNotes()
-
     }
 
     private fun listeners() {
         binding.addButton.setOnClickListener {
-            val action =
+            findNavController().navigate(
                 NoteListFragmentDirections.actionNoteListFragmentToNoteDetailFragment(null)
-            findNavController().navigate(action)
+            )
         }
     }
 
@@ -90,17 +88,13 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
         inflater.inflate(R.menu.menu, menu)
         val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager?
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
 
         searchView.setSearchableInfo(manager?.getSearchableInfo(requireActivity().componentName))
-
-
         searchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
