@@ -1,7 +1,6 @@
 package com.example.notesapp.ui.list
 
 import android.app.SearchManager
-import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +9,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,9 +19,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesapp.R
+import com.example.notesapp.common.DelayedOnQueryTextListener
+import com.example.notesapp.common.Response
 import com.example.notesapp.databinding.FragmentNoteListBinding
 import com.example.notesapp.ui.list.adapter.NoteAdapter
-import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -81,8 +81,64 @@ class NoteListFragment : Fragment() {
     private fun observeNotes() {
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.allNotes.collect { notes ->
-                    noteAdapter.submitList(notes)
+                viewModel.allNotesFlow.collect { response ->
+                    when (response) {
+                        is Response.Success -> {
+                            noteAdapter.submitList(response.data)
+                        }
+
+                        is Response.Error -> {
+                            val message = response.message
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        }
+
+                        is Response.Loading -> {
+                            // NO-OP
+                        }
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.deleteNoteFlow.collect { response ->
+                    when (response) {
+                        is Response.Success -> {
+                            val message = response.data
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        }
+
+                        is Response.Error -> {
+                            val message = response.message
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        }
+
+                        is Response.Loading -> {
+                            // NO-OP
+                        }
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.searchNoteFlow.collect { response ->
+                    when (response) {
+                        is Response.Success -> {
+                            noteAdapter.submitList(response.data)
+                        }
+
+                        is Response.Error -> {
+                            val message = response.message
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        }
+
+                        is Response.Loading -> {
+                            // NO-OP
+                        }
+                    }
                 }
             }
         }
@@ -95,15 +151,11 @@ class NoteListFragment : Fragment() {
         val searchView = searchItem.actionView as SearchView
 
         searchView.setSearchableInfo(manager?.getSearchableInfo(requireActivity().componentName))
-        searchView.setOnQueryTextListener(object :
-            SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchNotes(newText.orEmpty())
-                return true
+        searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener() {
+            override fun onDelayerQueryTextChange(query: String?) {
+                if (query.isNullOrEmpty() || query.length > MIN_SEARCH_LENGTH) {
+                    viewModel.searchNotes(key = query)
+                }
             }
         })
     }
@@ -116,5 +168,9 @@ class NoteListFragment : Fragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    companion object {
+        private const val MIN_SEARCH_LENGTH = 2
     }
 }

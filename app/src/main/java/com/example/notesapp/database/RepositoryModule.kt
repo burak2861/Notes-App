@@ -30,7 +30,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNoteRepository(noteDao: NoteDao): NoteRepository {
-        return NoteRepository(noteDao)
+        return NoteRepositoryImpl(noteDao)
     }
 }
 

@@ -5,12 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.notesapp.common.Response
 import com.example.notesapp.databinding.FragmentNoteDetailBinding
 import com.example.notesapp.model.Note
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NoteDetailFragment : Fragment() {
@@ -32,9 +37,24 @@ class NoteDetailFragment : Fragment() {
     }
 
     private fun observe() {
-        lifecycleScope.launchWhenResumed {
-            viewModel.selectedNote.collect {
-                setData(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.selectedNote.collect { noteResponse ->
+                    when (noteResponse) {
+                        is Response.Success -> {
+                            setData(noteResponse.data)
+                        }
+
+                        is Response.Error -> {
+                            val message = noteResponse.message
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        }
+
+                        is Response.Loading -> {
+                            // NO-OP
+                        }
+                    }
+                }
             }
         }
     }
