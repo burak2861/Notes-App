@@ -6,6 +6,7 @@ Kotlin (MVVM) Android not defteri uygulaması.
 * Not ekleme, düzenleme ve silme
 * Notları tarihe göre sıralama
 * Notları arama
+* Detay ve liste geçişlerinde animasyon
 
 ---
 ## Kullanılan Teknolojiler
