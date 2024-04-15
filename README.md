@@ -9,9 +9,11 @@ Kotlin (MVVM) Android not defteri uygulaması.
 
 ---
 ## Kullanılan Teknolojiler
+* MVVM
 * Room Database
 * Coroutine
 * Dagger-Hilt
 * ViewModel
 * LiveData
 * ViewBinding
+* Clean Architecture
