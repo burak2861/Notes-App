@@ -9,7 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -148,10 +147,11 @@ class NoteListFragment : Fragment() {
         inflater.inflate(R.menu.menu, menu)
         val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager?
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
+        val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
 
         searchView.setSearchableInfo(manager?.getSearchableInfo(requireActivity().componentName))
-        searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener() {
+        searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener(),
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onDelayerQueryTextChange(query: String?) {
                 if (query.isNullOrEmpty() || query.length > MIN_SEARCH_LENGTH) {
                     viewModel.searchNotes(key = query)
