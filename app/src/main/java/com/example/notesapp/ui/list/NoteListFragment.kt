@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -54,12 +55,12 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
 
         listeners()
         setupRecyclerView()
         observeNotes()
         viewModel.getAllNotes()
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun listeners() {
@@ -143,30 +144,32 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
-        val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager?
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.menu, menu)
+            val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager?
+            val searchItem = menu.findItem(R.id.action_search)
+            val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
 
-        searchView.setSearchableInfo(manager?.getSearchableInfo(requireActivity().componentName))
-        searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener(),
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onDelayerQueryTextChange(query: String?) {
-                if (query.isNullOrEmpty() || query.length > MIN_SEARCH_LENGTH) {
-                    viewModel.searchNotes(key = query)
+            searchView.setSearchableInfo(manager?.getSearchableInfo(requireActivity().componentName))
+            searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener(),
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onDelayerQueryTextChange(query: String?) {
+                    if (query.isNullOrEmpty() || query.length > MIN_SEARCH_LENGTH) {
+                        viewModel.searchNotes(key = query)
+                    }
                 }
-            }
-        })
-    }
+            })
+        }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_search -> {
-                true
-            }
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.action_search -> {
+                    true
+                }
 
-            else -> super.onOptionsItemSelected(item)
+                else -> false
+            }
         }
     }
 
